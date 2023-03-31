@@ -2,13 +2,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
-const Login = (props) => {
-    const [username, setUsername] = useState("");
+const Login = () => {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // props.onLogin(token);
+        console.log({ email, password });
     };
 
     return (
@@ -39,9 +39,9 @@ const Login = (props) => {
                                 <Input
                                     type="text"
                                     placeholder="Enter your username"
-                                    value={username}
+                                    value={email}
                                     onChange={(event) =>
-                                        setUsername(event.target.value)
+                                        setEmail(event.target.value)
                                     }
                                     variant={"filled"}
                                 />
@@ -64,7 +64,7 @@ const Login = (props) => {
                                 mt="4"
                                 w="full"
                                 size="lg"
-                                disabled={!username || !password}
+                                disabled={!email || !password}
                             >
                                 Sign in
                             </Button>
