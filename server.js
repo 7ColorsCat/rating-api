@@ -7,6 +7,7 @@ const socket = require("socket.io");
 
 const authRoute = require("./routes/authRoutes");
 const customerRoute = require("./routes/customerRoute");
+const path = require("path");
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors("*"));
 
 app.use("/api/auth", authRoute);
 app.use("/api/customer", customerRoute);
+app.use(express.static(path.join("client", "dist")));
 
 app.get("/api", (_req, res) => {
     res.send("<h4>Server is running...</h4>");
