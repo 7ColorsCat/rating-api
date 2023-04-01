@@ -1,11 +1,11 @@
-import Login from "../pages/login";
+import Login from "./pages/login";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
 
 import useAuth from "./hooks/useAuth";
 
 function App() {
-    const { login, logout, isAuthenticated } = useAuth();
+    const { login, logout, isAuthenticated, isLoading, error } = useAuth();
 
     return (
         <Box>
@@ -30,7 +30,11 @@ function App() {
                         isAuthenticated() ? (
                             <Navigate to="/" />
                         ) : (
-                            <Login onLogin={login} />
+                            <Login
+                                onLogin={login}
+                                isLoading={isLoading}
+                                error={error}
+                            />
                         )
                     }
                 />

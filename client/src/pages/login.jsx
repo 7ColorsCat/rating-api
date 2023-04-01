@@ -1,14 +1,22 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+    Alert,
+    AlertIcon,
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+} from "@chakra-ui/react";
 
-const Login = () => {
-    const [email, setEmail] = useState("");
+const Login = ({ onLogin, isLoading, error }) => {
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log({ email, password });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await onLogin(username, password);
     };
 
     return (
@@ -39,9 +47,9 @@ const Login = () => {
                                 <Input
                                     type="text"
                                     placeholder="Enter your username"
-                                    value={email}
+                                    value={username}
                                     onChange={(event) =>
-                                        setEmail(event.target.value)
+                                        setUsername(event.target.value)
                                     }
                                     variant={"filled"}
                                 />
@@ -58,16 +66,36 @@ const Login = () => {
                                     variant={"filled"}
                                 />
                             </FormControl>
+
                             <Button
                                 type="submit"
                                 colorScheme="gray"
                                 mt="4"
                                 w="full"
                                 size="lg"
-                                disabled={!email || !password}
+                                disabled={!username || !password}
+                                isLoading={isLoading}
                             >
                                 Sign in
                             </Button>
+                            <AnimatePresence>
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                >
+                                    {error && (
+                                        <Alert
+                                            status="error"
+                                            rounded={"lg"}
+                                            my={"4"}
+                                        >
+                                            <AlertIcon />
+                                            {error.message}
+                                        </Alert>
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
                         </form>
                     </Box>
                 </motion.div>

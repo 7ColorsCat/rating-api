@@ -10,11 +10,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    info: {
-        store: {
-            type: String,
-            required: true,
-        },
+    store: {
+        type: String,
+        required: true,
     },
 });
 
