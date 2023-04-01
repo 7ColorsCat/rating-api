@@ -21,7 +21,7 @@ app.use(cors("*"));
 
 app.use("/api/auth", authRoute);
 app.use("/api/customer", customerRoute);
-app.use(express.static(path.join("client", "dist")));
+app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get("/api", (_req, res) => {
     res.send("<h4>Server is running...</h4>");

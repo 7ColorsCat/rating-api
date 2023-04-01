@@ -52,6 +52,7 @@ const Login = ({ onLogin, isLoading, error }) => {
                                         setUsername(event.target.value)
                                     }
                                     variant={"filled"}
+                                    autoComplete="off"
                                 />
                             </FormControl>
                             <FormControl id="password" mt="4" isRequired>
