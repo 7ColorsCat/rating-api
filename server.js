@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const http = require("http");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const socket = require("socket.io");
 
 const authRoute = require("./routes/authRoutes");
 const customerRoute = require("./routes/customerRoute");
@@ -12,6 +13,7 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 const server = http.createServer(app);
+const io = socket(server);
 
 app.use(express.json({ extends: false }));
 app.use(cors("*"));
@@ -21,6 +23,10 @@ app.use("/api/customer", customerRoute);
 
 app.get("/api", (_req, res) => {
     res.send("<h4>Server is running...</h4>");
+});
+
+io.on("connection", (socket) => {
+    console.log(socket.id);
 });
 
 mongoose
