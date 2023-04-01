@@ -5,6 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const authRoute = require("./routes/authRoutes");
+const customerRoute = require("./routes/customerRoute");
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json({ extends: false }));
 app.use(cors("*"));
 
 app.use("/api/auth", authRoute);
+app.use("/api/customer", customerRoute);
+
 app.get("/api", (_req, res) => {
     res.send("<h4>Server is running...</h4>");
 });

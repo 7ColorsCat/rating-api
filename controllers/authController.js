@@ -35,7 +35,6 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log({ username, password });
 
         const user = await User.findOne({ username });
         if (!user) {
@@ -99,7 +98,7 @@ exports.verifyToken = async (req, res) => {
                 });
             }
 
-            return res.json({ message: "ok" });
+            return res.json({ ok: true });
         } catch (err) {
             if (err.name === "TokenExpiredError") {
                 return res.status(400).json({ message: "Token expired" });

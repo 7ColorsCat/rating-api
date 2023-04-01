@@ -13,7 +13,7 @@ function validate(schema) {
             const errors = validateFn.errors.map((err) => {
                 return {
                     message: err.message,
-                    path: err.instancePath,
+                    err,
                 };
             });
             res.status(400).json({ errors });
