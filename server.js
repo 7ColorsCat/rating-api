@@ -23,14 +23,19 @@ app.use(express.json({ extends: false }));
 app.use(
     cors({
         origin: "*",
-        methods: ["GET", "POST", "PUT"],
+        methods: ["GET", "POST", "PATCH"],
     })
 );
-
+const CustomerController = require("./controllers/customerController");
 io.on("connection", (socket) => {
     console.log("client connected");
     socket.on("joinRoom", (store) => {
         socket.join(store);
+        CustomerController.getCustomerWatting(store)
+            .then((result) => {
+                socket.emit("newRating", result);
+            })
+            .catch((error) => console.log(error));
     });
 
     socket.on("disconnect", () => console.log("User disconnected"));

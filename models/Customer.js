@@ -38,7 +38,7 @@ const CustomerSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["watting", "done"],
+            enum: ["watting", "done", "ignore"],
             default: "watting",
         },
     },

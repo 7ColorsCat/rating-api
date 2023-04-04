@@ -32,3 +32,16 @@ exports.create = async (req, res) => {
         return res.status(500).json({ message: "Sever error" });
     }
 };
+
+exports.getCustomerWatting = async (store) => {
+    try {
+        const wattingCustomer = await Customer.findOne({
+            store,
+            status: "watting",
+        });
+        return wattingCustomer;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
