@@ -4,7 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const useAuth = () => {
     const [accessToken, setAccessToken] = useState(
-        localStorage.getItem("accessToken") || ""
+        localStorage.getItem("scc-access-token") || ""
     );
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +26,8 @@ const useAuth = () => {
                 password,
             });
             setAccessToken(response.data.token);
-            localStorage.setItem("accessToken", response.data.token);
+            localStorage.setItem("scc-access-token", response.data.token);
+            localStorage.setItem("scc-store", response.data.store);
             setIsAuthenticated(true);
             setError(null);
         } catch (error) {
@@ -38,7 +39,7 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        localStorage.removeItem("accessToken");
+        localStorage.removeItem("scc-access-token");
         setAccessToken(null);
     };
 

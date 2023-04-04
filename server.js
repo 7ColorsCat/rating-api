@@ -3,21 +3,39 @@ const dotenv = require("dotenv");
 const http = require("http");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const socket = require("socket.io");
-
+const socketIO = require("socket.io");
+const path = require("path");
 const authRoute = require("./routes/authRoutes");
 const customerRoute = require("./routes/customerRoute");
-const path = require("path");
 
 dotenv.config();
 
 const PORT = process.env.PORT;
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = socketIO(server, {
+    cors: {
+        origin: "*",
+    },
+});
 
 app.use(express.json({ extends: false }));
-app.use(cors("*"));
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT"],
+    })
+);
+
+io.on("connection", (socket) => {
+    console.log("client connected");
+    socket.on("disconnect", () => console.log("user disconnected"));
+});
+
+app.use((req, _res, next) => {
+    req.io = io;
+    next();
+});
 
 app.use("/api/auth", authRoute);
 app.use("/api/customer", customerRoute);
@@ -25,10 +43,6 @@ app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get("/api", (_req, res) => {
     res.send("<h4>Server is running...</h4>");
-});
-
-io.on("connection", (socket) => {
-    console.log(socket.id);
 });
 
 mongoose
