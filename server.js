@@ -29,7 +29,11 @@ app.use(
 
 io.on("connection", (socket) => {
     console.log("client connected");
-    socket.on("disconnect", () => console.log("user disconnected"));
+    socket.on("joinRoom", (store) => {
+        socket.join(store);
+    });
+
+    socket.on("disconnect", () => console.log("User disconnected"));
 });
 
 app.use((req, _res, next) => {

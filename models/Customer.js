@@ -24,6 +24,13 @@ const CustomerSchema = new mongoose.Schema(
         store: {
             type: String,
         },
+        address: {
+            type: String,
+        },
+        revenue: {
+            type: Number,
+            min: 0,
+        },
         rating: {
             type: Number,
             min: 0,

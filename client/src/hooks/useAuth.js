@@ -10,6 +10,7 @@ const useAuth = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(!!accessToken);
     const [spin, setSpin] = useState(true);
+    const [store, setStore] = useState(localStorage.getItem("scc-store") || "");
 
     const axiosInstance = axios.create({
         baseURL: API_URL,
@@ -26,6 +27,7 @@ const useAuth = () => {
                 password,
             });
             setAccessToken(response.data.token);
+            setStore(response.data.store);
             localStorage.setItem("scc-access-token", response.data.token);
             localStorage.setItem("scc-store", response.data.store);
             setIsAuthenticated(true);
@@ -65,6 +67,7 @@ const useAuth = () => {
         isAuthenticated,
         isLoading,
         spin,
+        store,
     };
 };
 

@@ -12,12 +12,14 @@ import {
 } from "./services/socketio.service";
 
 function App() {
-    const { login, logout, isAuthenticated, isLoading, error, spin } =
+    const { login, logout, isAuthenticated, isLoading, error, spin, store } =
         useAuth();
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (!spin && isAuthenticated) {
             initiateSocketConnection();
+
+            emit("joinRoom", store);
 
             on("newRating", (data) => {
                 console.log(data);
@@ -27,7 +29,7 @@ function App() {
                 disconnectSocket();
             };
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, spin, store]);
 
     return (
         <Routes>
