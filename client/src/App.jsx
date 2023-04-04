@@ -36,7 +36,11 @@ function App() {
             <Route
                 path="/"
                 element={
-                    <Home isLoading={spin} isAuthenticated={isAuthenticated} />
+                    <Home
+                        isLoading={spin}
+                        isAuthenticated={isAuthenticated}
+                        store={store}
+                    />
                 }
             />
             <Route
