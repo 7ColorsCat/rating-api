@@ -9,7 +9,6 @@ import {
     Flex,
     Heading,
     Skeleton,
-    Text,
 } from "@chakra-ui/react";
 import { Navigate } from "react-router-dom";
 
@@ -20,10 +19,22 @@ const Home = ({ isLoading, isAuthenticated, store }) => {
         style: "currency",
         currency: "VND",
     });
+
     return (
-        <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-            <Box p={6}>
-                <Card p={6} shadow={"xl"} rounded={"xl"} textAlign={"center"}>
+        <Skeleton
+            isLoaded={!isLoading}
+            fadeDuration={1}
+            bgGradient={"linear(to-r, yellow.300, orange)"}
+            py={6}
+        >
+            <Box p={6} pt={0}>
+                <Card
+                    p={6}
+                    shadow={"xl"}
+                    textAlign={"center"}
+                    backdropFilter={"auto"}
+                    backdropBlur={"sm"}
+                >
                     <Heading>Tran Thien Khanh</Heading>
                     <p>9876 543 211</p>
                     <p>admin@gmail.com</p>
@@ -31,24 +42,25 @@ const Home = ({ isLoading, isAuthenticated, store }) => {
                 </Card>
             </Box>
             <Box px={6}>
-                <Flex justify={"space-between"} gap={2}>
-                    <Card bg={"gray.200"} w={"50%"} shadow={"xl"}>
+                <Flex justify={"space-between"} gap={6}>
+                    <Card w={"50%"} shadow={"xl"} textAlign={"center"}>
                         <CardHeader>
-                            <Heading as={"h3"} size={"sm"} textAlign={"center"}>
+                            <Heading
+                                as={"h3"}
+                                size={"lg"}
+                                textTransform={"uppercase"}
+                                fontWeight={"light"}
+                            >
                                 Order ID
                             </Heading>
                         </CardHeader>
-                        <CardBody>
-                            <Text textAlign={"center"}>12312321231231</Text>
+                        <CardBody textAlign={"center"}>
+                            <Badge fontSize={"md"} colorScheme="orange" p={2}>
+                                12312321231231
+                            </Badge>
                         </CardBody>
                         <CardFooter>
-                            <Center
-                                p={2}
-                                bg={"blue.400"}
-                                w={"full"}
-                                color={"white"}
-                                rounded={"lg"}
-                            >
+                            <Center p={2} rounded={"md"} w={"full"}>
                                 CH
                                 <Badge mx={2} size={"sm"}>
                                     {store}
@@ -56,16 +68,22 @@ const Home = ({ isLoading, isAuthenticated, store }) => {
                             </Center>
                         </CardFooter>
                     </Card>
-                    <Card bg={"gray.200"} w={"50%"} shadow={"xl"}>
+                    <Card w={"50%"} shadow={"xl"}>
                         <CardHeader>
-                            <Heading as={"h3"} size={"sm"} textAlign={"center"}>
+                            <Heading
+                                as={"h3"}
+                                size={"lg"}
+                                fontWeight={"light"}
+                                textAlign={"center"}
+                                textTransform={"uppercase"}
+                            >
                                 Revenue
                             </Heading>
                         </CardHeader>
-                        <CardBody>
-                            <Text textAlign={"center"}>
+                        <CardBody textAlign={"center"}>
+                            <Badge fontSize={"md"} p={2} colorScheme="orange">
                                 {formatter.format(22000000)}
-                            </Text>
+                            </Badge>
                         </CardBody>
                     </Card>
                 </Flex>
