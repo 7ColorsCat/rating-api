@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "server": "env-cmd -f .env.staging nodemon server.js",
-        "client": "npm run dev --prefix=client",
+        "client": "npm run dev --prefix=client -- --host",
         "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "author": "7ColorsCat",

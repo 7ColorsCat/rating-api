@@ -1,6 +1,6 @@
 import Login from "./pages/login";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import useAuth from "./hooks/useAuth";
 import Home from "./pages/home";
@@ -14,6 +14,7 @@ import {
 function App() {
     const { login, logout, isAuthenticated, isLoading, error, spin, store } =
         useAuth();
+    const [customer, setCustomer] = useState({});
 
     useEffect(() => {
         if (!spin && isAuthenticated) {
@@ -22,7 +23,7 @@ function App() {
             emit("joinRoom", store);
 
             on("newRating", (data) => {
-                console.log(data);
+                setCustomer(data);
             });
 
             return () => {
@@ -40,6 +41,7 @@ function App() {
                         isLoading={spin}
                         isAuthenticated={isAuthenticated}
                         store={store}
+                        customer={customer}
                     />
                 }
             />
