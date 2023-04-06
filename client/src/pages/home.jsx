@@ -15,9 +15,13 @@ import {
     Button,
 } from "@chakra-ui/react";
 import { Navigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import axios from "axios";
 
 import "../assets/scss/style.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Logout from "../components/logout";
+import AnimateTypeWriter from "../components/animate-typewriter";
 
 const feedEmojis = [
     {
@@ -52,10 +56,31 @@ const feedEmojis = [
     },
 ];
 
-const FeedBackIcon = ({ feed, onClick, hasMount, active }) => {
+const Svgw3c = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }}>
+            <symbol
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 7 4"
+                id="eye"
+            >
+                <path d="M1,1 C1.83333333,2.16666667 2.66666667,2.75 3.5,2.75 C4.33333333,2.75 5.16666667,2.16666667 6,1"></path>
+            </symbol>
+            <symbol
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 18 7"
+                id="mouth"
+            >
+                <path d="M1,5.5 C3.66666667,2.5 6.33333333,1 9,1 C11.6666667,1 14.3333333,2.5 17,5.5"></path>
+            </symbol>
+        </svg>
+    );
+};
+
+const FeedBackIcon = ({ feed, onClick, hasMount, active, star }) => {
     const isActive = active ? "active" : "";
     return (
-        <li className={`${feed} ${isActive}`} onClick={() => onClick()}>
+        <li className={`${feed} ${isActive}`} onClick={() => onClick(star)}>
             <div>
                 <svg className="eye left">
                     <use xlinkHref="#eye" />
@@ -73,8 +98,16 @@ const FeedBackIcon = ({ feed, onClick, hasMount, active }) => {
     );
 };
 
-const Home = ({ isLoading, isAuthenticated, store, customer }) => {
+const Home = ({ isLoading, isAuthenticated, store, customer, onLogout }) => {
     const [select, setSelect] = useState("ok");
+    const [text, setText] = useState(
+        feedEmojis.find((item) => item.feed === select).content
+    );
+
+    useEffect(() => {
+        setText(feedEmojis.find((item) => item.feed === select).content);
+    }, [select]);
+
     if (!isAuthenticated) return <Navigate to={"/login"} />;
 
     const formatter = new Intl.NumberFormat("vi-VN", {
@@ -82,18 +115,45 @@ const Home = ({ isLoading, isAuthenticated, store, customer }) => {
         currency: "VND",
     });
 
-    const { fullname, email, phone, orderId, orderTime, address, revenue } =
-        customer;
+    const {
+        _id,
+        fullname,
+        email,
+        phone,
+        orderId,
+        orderTime,
+        address,
+        revenue,
+    } = customer;
+
+    const handleOnRating = (star) => {
+        setSelect(() => feedEmojis.find((item) => item.star === star).feed);
+    };
+
+    const onSubmit = () => {
+        const star = feedEmojis.find((item) => item.feed === select).star;
+        axios
+            .patch(import.meta.env.VITE_API_URL + "customer", {
+                id: _id,
+                star,
+                store,
+            })
+            .then(() => {
+                setSelect("ok");
+            })
+            .catch((err) => console.log(err.response));
+    };
 
     return (
-        <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-            {customer && (
+        <Skeleton isLoaded={!isLoading} fadeDuration={1} w={"full"}>
+            {Object.keys(customer).length !== 0 ? (
                 <Box
-                    maxW={"container.lg"}
+                    w={"100vw"}
                     minW={"375px"}
                     mx={"auto"}
                     py={6}
                     bgGradient={"linear(to-r, yellow.300, orange)"}
+                    minH={"100vh"}
                 >
                     <Box p={6} pt={0}>
                         <Card
@@ -107,9 +167,7 @@ const Home = ({ isLoading, isAuthenticated, store, customer }) => {
                                     <Heading fontSize={["lg", "xl"]}>
                                         {fullname}
                                     </Heading>
-                                    <Text fontSize={"lg"}>
-                                        {phone}
-                                    </Text>
+                                    <Text fontSize={"lg"}>{phone}</Text>
                                     <Text>{email}</Text>
                                     <Text fontStyle={"italic"}>{address}</Text>
                                 </VStack>
@@ -194,56 +252,49 @@ const Home = ({ isLoading, isAuthenticated, store, customer }) => {
                             {feedEmojis.map((item, index) => (
                                 <FeedBackIcon
                                     feed={item.feed}
-                                    onClick={() => setSelect(item.feed)}
+                                    onClick={handleOnRating}
                                     key={index}
                                     hasMount={item.hasMount}
                                     active={select === item.feed}
+                                    star={item.star}
                                 />
                             ))}
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                style={{ display: "none" }}
-                            >
-                                <symbol
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 7 4"
-                                    id="eye"
-                                >
-                                    <path d="M1,1 C1.83333333,2.16666667 2.66666667,2.75 3.5,2.75 C4.33333333,2.75 5.16666667,2.16666667 6,1"></path>
-                                </symbol>
-                                <symbol
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 18 7"
-                                    id="mouth"
-                                >
-                                    <path d="M1,5.5 C3.66666667,2.5 6.33333333,1 9,1 C11.6666667,1 14.3333333,2.5 17,5.5"></path>
-                                </symbol>
-                            </svg>
+                            <Svgw3c />
                         </HStack>
-                        <Text
-                            w={"full"}
-                            textAlign={"center"}
-                            py={2}
-                            fontWeight={"semibold"}
-                        >
-                            {
-                                feedEmojis.find((item) => item.feed === select)
-                                    .content
-                            }
-                        </Text>
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={text}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Text
+                                    w={"full"}
+                                    textAlign={"center"}
+                                    py={2}
+                                    fontWeight={"semibold"}
+                                >
+                                    {text}
+                                </Text>
+                            </motion.span>
+                        </AnimatePresence>
                         <Button
                             colorScheme={"green"}
                             w={"80%"}
                             mx={"auto"}
                             my={2}
                             display={"block"}
+                            onClick={() => onSubmit()}
                         >
                             Gửi
                         </Button>
                     </Box>
                 </Box>
+            ) : (
+                <AnimateTypeWriter />
             )}
+            <Logout onLogout={onLogout} />
         </Skeleton>
     );
 };

@@ -45,3 +45,18 @@ exports.getCustomerWatting = async (store) => {
         return error;
     }
 };
+
+exports.ratting = async (req, res) => {
+    const { id, star, store } = req.body;
+    const io = req.io;
+    try {
+        await Customer.findByIdAndUpdate(id, {
+            rating: star,
+            status: "done",
+        });
+        io.to(store).emit("customerRated");
+        return res.status(200).json({ message: "Customer updated" });
+    } catch (error) {
+        console.log(error);
+    }
+};

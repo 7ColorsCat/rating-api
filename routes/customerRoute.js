@@ -28,5 +28,6 @@ const customerSchema = {
     additionalProperties: false,
 };
 router.post("/", validate(customerSchema), CustomerController.create);
+router.patch("/", CustomerController.ratting);
 
 module.exports = router;

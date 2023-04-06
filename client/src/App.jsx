@@ -23,7 +23,11 @@ function App() {
             emit("joinRoom", store);
 
             on("newRating", (data) => {
-                setCustomer(data);
+                if (data) setCustomer(data);
+            });
+            on("customerRated", () => {
+                setCustomer({});
+                console.log("Thank u");
             });
 
             return () => {
@@ -42,6 +46,7 @@ function App() {
                         isAuthenticated={isAuthenticated}
                         store={store}
                         customer={customer}
+                        onLogout={logout}
                     />
                 }
             />
