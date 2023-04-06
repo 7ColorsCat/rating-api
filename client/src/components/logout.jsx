@@ -10,6 +10,7 @@ const Logout = ({ onLogout }) => {
             onClick={() => onLogout()}
             title="Đăng xuất"
             bg={'transparent'}
+            _hover={{ bg: 'transparent' }}
         >
             <Image src={logoutImg} />
         </Button>

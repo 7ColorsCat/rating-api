@@ -1,5 +1,5 @@
 import Login from "./pages/login";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import useAuth from "./hooks/useAuth";
@@ -10,11 +10,13 @@ import {
     initiateSocketConnection,
     on,
 } from "./services/socketio.service";
+import ThankYou from "./pages/thanhyou";
 
 function App() {
     const { login, logout, isAuthenticated, isLoading, error, spin, store } =
         useAuth();
     const [customer, setCustomer] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!spin && isAuthenticated) {
@@ -27,14 +29,15 @@ function App() {
             });
             on("customerRated", () => {
                 setCustomer({});
-                console.log("Thank u");
+                navigate("/thankyou");
             });
 
             return () => {
                 disconnectSocket();
             };
         }
-    }, [isAuthenticated, spin, store]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, spin]);
 
     return (
         <Routes>
@@ -63,6 +66,10 @@ function App() {
                         />
                     )
                 }
+            />
+            <Route
+                path="/thankyou"
+                element={<ThankYou />}
             />
         </Routes>
     );

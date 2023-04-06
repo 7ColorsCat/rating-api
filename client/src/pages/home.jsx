@@ -248,7 +248,8 @@ const Home = ({ isLoading, isAuthenticated, store, customer, onLogout }) => {
                         </Flex>
                     </Box>
                     <Box px={6} py={10}>
-                        <HStack className="feedback" justify={"center"}>
+                        <Text fontSize={'lg'} textAlign={'center'} py={4}>Đánh giá trải nghiệm mua hàng tại APJ</Text>
+                        <HStack className="feedback" justify={"center"} spacing={6}>
                             {feedEmojis.map((item, index) => (
                                 <FeedBackIcon
                                     feed={item.feed}
