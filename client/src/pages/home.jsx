@@ -315,7 +315,7 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
                         </AnimatePresence>
                         <Button
                             colorScheme={"green"}
-                            w={"80%"}
+                            w={"xs"}
                             mx={"auto"}
                             my={2}
                             display={"block"}
@@ -326,7 +326,36 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
                     </Box>
                 </Box>
             ) : (
-                <AnimateTypeWriter />
+                <Box
+                    w={"100vw"}
+                    h={"100vh"}
+                    bgGradient={"linear(to-r, yellow.300, orange)"}
+                >
+                    <Flex
+                        justify={"center"}
+                        alignItems={"center"}
+                        direction={"column"}
+                        h={"100%"}
+                    >
+                        <Heading
+                            mb={"28"}
+                            textTransform={"uppercase"}
+                            fontWeight={"light"}
+                            bg={"whiteAlpha.600"}
+                            backdropFilter={"auto"}
+                            backdropBlur={"md"}
+                            px={8}
+                            textAlign={"center"}
+                            rounded={'lg'}
+                        >
+                            Cửa hàng {store}
+                        </Heading>
+                        <AnimateTypeWriter />
+                        <Text p={2} fontWeight={"semibold"}>
+                            Chưa có đơn hàng...
+                        </Text>
+                    </Flex>
+                </Box>
             )}
             <Logout onLogout={onLogout} />
         </Skeleton>
