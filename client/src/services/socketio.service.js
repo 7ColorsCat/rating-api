@@ -5,11 +5,11 @@ let socket;
 const SOCKET_ENDPOINT = import.meta.env.VITE_SOCKET_ENDPOINT;
 export const initiateSocketConnection = () => {
     socket = io(SOCKET_ENDPOINT);
-    console.log("Connecting socket... ");
+    console.info("Connecting socket... ");
 };
 
 export const disconnectSocket = () => {
-    console.log("Disconnecting socket...");
+    console.info("Disconnecting socket...");
     if (socket) socket.disconnect();
 };
 

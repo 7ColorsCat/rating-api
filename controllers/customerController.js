@@ -63,7 +63,7 @@ exports.ratting = async (req, res) => {
         );
         const { email, phone, fullname, orderId, revenue, orderTime, address } =
             customer;
-        io.to(store).emit("customerRated", customer);
+        io.to(store).emit("customerRated");
         await SheetDB.create({
             email,
             phone,

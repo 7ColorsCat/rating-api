@@ -118,11 +118,9 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
         emit("joinRoom", store);
 
         on("newRating", (data) => {
-            console.log({ msg: "new", data });
             if (data) setCustomer(data);
         });
-        on("customerRated", (data) => {
-            console.log({ msg: "rated", data });
+        on("customerRated", () => {
             navigate("/thankyou");
         });
 
