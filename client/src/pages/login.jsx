@@ -43,10 +43,9 @@ const Login = ({ onLogin, isLoading, error }) => {
                     <Box mx="auto" bg="transparent" p="8" borderRadius="md">
                         <form onSubmit={handleSubmit}>
                             <FormControl id="email" isRequired>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Tài khoản</FormLabel>
                                 <Input
                                     type="text"
-                                    placeholder="Enter your username"
                                     value={username}
                                     onChange={(event) =>
                                         setUsername(event.target.value)
@@ -56,10 +55,9 @@ const Login = ({ onLogin, isLoading, error }) => {
                                 />
                             </FormControl>
                             <FormControl id="password" mt="4" isRequired>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>Mật khẩu</FormLabel>
                                 <Input
                                     type="password"
-                                    placeholder="Enter your password"
                                     value={password}
                                     onChange={(event) =>
                                         setPassword(event.target.value)
@@ -77,7 +75,7 @@ const Login = ({ onLogin, isLoading, error }) => {
                                 disabled={!username || !password}
                                 isLoading={isLoading}
                             >
-                                Sign in
+                                Đăng nhập
                             </Button>
                             <AnimatePresence>
                                 <motion.div
