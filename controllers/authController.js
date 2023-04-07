@@ -39,12 +39,14 @@ exports.login = async (req, res) => {
 
         const user = await User.findOne({ username });
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(400).json({ message: "Tài khoản không tồn tại" });
         }
 
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
-            return res.status(400).json({ message: "Invalid password" });
+            return res
+                .status(400)
+                .json({ message: "Tên hoặc mật khẩu không chính xác" });
         }
 
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
