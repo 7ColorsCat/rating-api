@@ -345,6 +345,7 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
                             backdropFilter={"auto"}
                             backdropBlur={"md"}
                             px={8}
+                            py={4}
                             textAlign={"center"}
                             rounded={'lg'}
                         >

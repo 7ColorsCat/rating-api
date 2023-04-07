@@ -6,7 +6,9 @@
     "scripts": {
         "server": "env-cmd -f .env.staging nodemon server.js",
         "client": "npm run dev --prefix=client -- --host",
-        "dev": "concurrently \"npm run server\" \"npm run client\""
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "build": "npm run build --prefix=client",
+        "deloy": "env-cmd -f .env.product node server.js"
     },
     "author": "7ColorsCat",
     "license": "ISC",

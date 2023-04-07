@@ -29,7 +29,7 @@ app.use(
 );
 const CustomerController = require("./controllers/customerController");
 io.on("connection", (socket) => {
-    logger.info("Client connected");
+    logger.info(`Client ${socket.id} connected`);
     socket.on("joinRoom", (store) => {
         socket.join(store);
         CustomerController.getCustomerWatting(store)
@@ -39,7 +39,9 @@ io.on("connection", (socket) => {
             .catch((error) => logger.error(error.message));
     });
 
-    socket.on("disconnect", () => logger.info("Client disconnected"));
+    socket.on("disconnect", (socket) =>
+        logger.info(`Client ${socket.id} disconnected`)
+    );
 });
 
 app.use((req, _res, next) => {
@@ -61,7 +63,7 @@ mongoose
         logger.info("Connected to MongoDB");
 
         server.listen(PORT, () => {
-            logger.info(`Server listening on ${PORT}`);
+            logger.info(`Server listening on port ${PORT}`);
         });
     })
     .catch((err) => logger.error(err.message));
