@@ -21,7 +21,7 @@ const Login = ({ onLogin, isLoading, error }) => {
 
     return (
         <Box
-            w={"100%"}
+            w={"100vw"}
             h={"100vh"}
             bgGradient="radial-gradient(rgb(253, 146, 4), rgb(251, 195, 102))"
             alignItems={"center"}
