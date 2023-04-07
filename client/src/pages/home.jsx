@@ -14,7 +14,7 @@ import {
     HStack,
     Button,
 } from "@chakra-ui/react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import axios from "axios";
 
@@ -22,6 +22,12 @@ import "../assets/scss/style.scss";
 import { useEffect, useState } from "react";
 import Logout from "../components/logout";
 import AnimateTypeWriter from "../components/animate-typewriter";
+import {
+    disconnectSocket,
+    emit,
+    initiateSocketConnection,
+    on,
+} from "../services/socketio.service";
 
 const feedEmojis = [
     {
@@ -98,11 +104,33 @@ const FeedBackIcon = ({ feed, onClick, hasMount, active, star }) => {
     );
 };
 
-const Home = ({ isLoading, isAuthenticated, store, customer, onLogout }) => {
+const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
     const [select, setSelect] = useState("ok");
     const [text, setText] = useState(
         feedEmojis.find((item) => item.feed === select).content
     );
+    const [customer, setCustomer] = useState({});
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        initiateSocketConnection();
+
+        emit("joinRoom", store);
+
+        on("newRating", (data) => {
+            console.log({ msg: "new", data });
+            if (data) setCustomer(data);
+        });
+        on("customerRated", (data) => {
+            console.log({ msg: "rated", data });
+            navigate("/thankyou");
+        });
+
+        return () => {
+            disconnectSocket();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setText(feedEmojis.find((item) => item.feed === select).content);
@@ -139,6 +167,7 @@ const Home = ({ isLoading, isAuthenticated, store, customer, onLogout }) => {
                 store,
             })
             .then(() => {
+                onRated(true);
                 setSelect("ok");
             })
             .catch((err) => console.log(err.response));
@@ -248,8 +277,14 @@ const Home = ({ isLoading, isAuthenticated, store, customer, onLogout }) => {
                         </Flex>
                     </Box>
                     <Box px={6} py={10}>
-                        <Text fontSize={'lg'} textAlign={'center'} py={4}>Đánh giá trải nghiệm mua hàng tại APJ</Text>
-                        <HStack className="feedback" justify={"center"} spacing={6}>
+                        <Text fontSize={"lg"} textAlign={"center"} py={4}>
+                            Đánh giá trải nghiệm mua hàng tại APJ
+                        </Text>
+                        <HStack
+                            className="feedback"
+                            justify={"center"}
+                            spacing={6}
+                        >
                             {feedEmojis.map((item, index) => (
                                 <FeedBackIcon
                                     feed={item.feed}

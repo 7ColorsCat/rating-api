@@ -7,6 +7,7 @@ const socketIO = require("socket.io");
 const path = require("path");
 const authRoute = require("./routes/authRoutes");
 const customerRoute = require("./routes/customerRoute");
+const logger = require("./logs/logger");
 
 dotenv.config();
 
@@ -28,17 +29,17 @@ app.use(
 );
 const CustomerController = require("./controllers/customerController");
 io.on("connection", (socket) => {
-    console.log("client connected");
+    logger.info("Client connected");
     socket.on("joinRoom", (store) => {
         socket.join(store);
         CustomerController.getCustomerWatting(store)
             .then((result) => {
                 socket.emit("newRating", result);
             })
-            .catch((error) => console.log(error));
+            .catch((error) => logger.error(error.message));
     });
 
-    socket.on("disconnect", () => console.log("User disconnected"));
+    socket.on("disconnect", () => logger.info("Client disconnected"));
 });
 
 app.use((req, _res, next) => {
@@ -57,10 +58,10 @@ app.get("/api", (_req, res) => {
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
-        console.log("Connected to MongoDB");
+        logger.info("Connected to MongoDB");
 
         server.listen(PORT, () => {
-            console.log(`Server listening on ${PORT}`);
+            logger.info(`Server listening on ${PORT}`);
         });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => logger.error(err.message));

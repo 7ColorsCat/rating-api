@@ -1,4 +1,6 @@
+const logger = require("../logs/logger");
 const Customer = require("../models/Customer");
+const SheetDB = require("../modules/sheetdb");
 
 exports.create = async (req, res) => {
     const io = req.io;
@@ -23,12 +25,12 @@ exports.create = async (req, res) => {
             address,
             revenue,
         });
-        await newCustomer.save();
+        const result = await newCustomer.save();
 
-        io.to(store).emit("newRating", req.body);
+        io.to(store).emit("newRating", result);
         return res.status(201).json({ message: "Customer created" });
     } catch (error) {
-        console.log(error);
+        logger.info(error.message);
         return res.status(500).json({ message: "Sever error" });
     }
 };
@@ -39,9 +41,10 @@ exports.getCustomerWatting = async (store) => {
             store,
             status: "watting",
         });
+
         return wattingCustomer;
     } catch (error) {
-        console.log(error);
+        logger.error(error.message);
         return error;
     }
 };
@@ -50,13 +53,37 @@ exports.ratting = async (req, res) => {
     const { id, star, store } = req.body;
     const io = req.io;
     try {
-        await Customer.findByIdAndUpdate(id, {
+        const customer = await Customer.findByIdAndUpdate(
+            id,
+            {
+                rating: star,
+                status: "done",
+            },
+            { new: true }
+        );
+        const { email, phone, fullname, orderId, revenue, orderTime, address } =
+            customer;
+        io.to(store).emit("customerRated", customer);
+        await SheetDB.create({
+            email,
+            phone,
+            fullname,
+            orderId,
+            orderTime,
+            store,
+            address,
+            revenue,
             rating: star,
-            status: "done",
         });
-        io.to(store).emit("customerRated");
-        return res.status(200).json({ message: "Customer updated" });
+
+        module.exports
+            .getCustomerWatting(store)
+            .then((result) => {
+                io.to(store).emit("newRating", result);
+            })
+            .catch((error) => logger.error(error.message));
     } catch (error) {
-        console.log(error);
+        logger.error(error.message);
+        return res.status(500).json({ message: "Server error" });
     }
 };

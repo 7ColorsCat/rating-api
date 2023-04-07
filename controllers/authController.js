@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 const accounts = require("../admin/accounts.json");
+const logger = require("../logs/logger");
 
 exports.register = async (req, res) => {
     try {
@@ -27,7 +28,7 @@ exports.register = async (req, res) => {
 
         res.status(201).json({ message: "User created" });
     } catch (err) {
-        console.log(err.message);
+        logger.error(err.message);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -52,14 +53,14 @@ exports.login = async (req, res) => {
 
         return res.status(200).json({ token, store: user.store });
     } catch (err) {
-        console.log(err);
+        logger.error(err.message);
         return res.status(500).json({ message: "Server error" });
     }
 };
 
 exports.generateAccount = (_req, res) => {
     User.deleteMany({}).then(() => {
-        console.log("User collection deleted.");
+        logger.warn("User collection deleted.");
         Promise.all(
             accounts.map(async (acc) => {
                 const salt = await bcrypt.genSalt(10);
@@ -107,7 +108,7 @@ exports.verifyToken = async (req, res) => {
             return res.status(400).json({ message: "Invalid token" });
         }
     } catch (err) {
-        console.log(err);
+        logger.error(err.message);
         return res.status(500).json({ message: "Server error" });
     }
 };
