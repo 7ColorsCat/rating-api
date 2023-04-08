@@ -19,15 +19,6 @@ const whitelist = [
     "http://feedback.apj.vn",
     "http://14.225.254.94",
 ];
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-};
 const io = socketIO(server, {
     cors: {
         origin: whitelist,
@@ -35,7 +26,11 @@ const io = socketIO(server, {
 });
 
 app.use(express.json({ extends: false }));
-app.use(cors(corsOptions));
+app.use(
+    cors({
+        origin: whitelist,
+    })
+);
 
 const CustomerController = require("./controllers/customerController");
 io.on("connection", (socket) => {
