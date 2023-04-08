@@ -14,19 +14,29 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 const server = http.createServer(app);
+const whitelist = [
+    "http://localhost",
+    "http://feedback.apj.vn",
+    "http://14.225.254.94",
+];
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+};
 const io = socketIO(server, {
     cors: {
-        origin: "*",
+        origin: whitelist,
     },
 });
 
 app.use(express.json({ extends: false }));
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "PATCH"],
-    })
-);
+app.use(cors(corsOptions));
+
 const CustomerController = require("./controllers/customerController");
 io.on("connection", (socket) => {
     logger.info(`Client ${socket.id} connected`);

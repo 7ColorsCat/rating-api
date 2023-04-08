@@ -43,7 +43,7 @@ const useAuth = () => {
     const logout = () => {
         localStorage.removeItem("scc-access-token");
         setAccessToken(null);
-        setIsAuthenticated(false)
+        setIsAuthenticated(false);
     };
 
     const verifyToken = async () => {
