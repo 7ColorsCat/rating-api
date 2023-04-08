@@ -159,7 +159,7 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
     const onSubmit = () => {
         const star = feedEmojis.find((item) => item.feed === select).star;
         axios
-            .patch(import.meta.env.VITE_API_URL + "customer", {
+            .patch(import.meta.env.VITE_API_URL + "/customer", {
                 id: _id,
                 star,
                 store,
@@ -347,7 +347,7 @@ const Home = ({ isLoading, isAuthenticated, store, onLogout, onRated }) => {
                             px={8}
                             py={4}
                             textAlign={"center"}
-                            rounded={'lg'}
+                            rounded={"lg"}
                         >
                             Cửa hàng {store}
                         </Heading>
